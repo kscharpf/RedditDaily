@@ -1,16 +1,17 @@
 import System.Exit
 
 
-data Event = Event Int String
+data Event = Event { num :: Int,
+                     label :: String } 
 
-eventNum :: Event -> Int
-eventNum (Event n _) = n
+instance Eq Event where
+    (Event x1 str1) == (Event x2 str2) = x1 == x2
 
-eventLabel :: Event -> String
-eventLabel (Event _ eventLabel) = eventLabel
+instance Show Event where
+    show (Event x xs) = (show x) ++ ") " ++ (show xs)
 
 showEvent :: Event -> String
-showEvent evt = (show (eventNum evt)) ++ ") " ++ (eventLabel evt) ++ "\n"
+showEvent evt = (show (num evt)) ++ ") " ++ (label evt) ++ "\n"
 
 flatten :: [[a]] -> [a]
 flatten = foldl (++) []
@@ -23,10 +24,10 @@ main = doMenu []
 
 addEvent :: String -> [Event] -> [Event]
 addEvent xs [] = [(Event 1 xs)]
-addEvent xs ys = ys ++ [(Event ((eventNum (last ys)) + 1) xs)]
+addEvent xs ys = ys ++ [(Event ((num (last ys)) + 1) xs)]
 
 deleteEvent :: String -> [Event] -> [Event]
-
+deleteEvent xs [] = undefined
 
 processSplitCommand :: [String] -> [Event] -> [Event]
 processSplitCommand ["a", xs] ys = addEvent xs ys
