@@ -1,4 +1,5 @@
 import System.Exit
+import Data.List
 
 
 data Event = Event { num :: Int,
@@ -34,10 +35,12 @@ addEvent xs [] = [(Event 1 xs)]
 addEvent xs ys = ys ++ [(Event ((num (last ys)) + 1) xs)]
 
 deleteEvent :: String -> [Event] -> [Event]
-deleteEvent xs [] = undefined
+deleteEvent str [] = [] 
+deleteEvent str ys = reorder (delete (Event (read str ::Int) "") ys) 
 
 processSplitCommand :: [String] -> [Event] -> [Event]
 processSplitCommand ["a", xs] ys = addEvent xs ys
+processSplitCommand ["d", xs] ys = deleteEvent xs ys
 
 processCommand :: String -> [Event] -> [Event]
 processCommand xs ys = processSplitCommand (words xs) ys 
