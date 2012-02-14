@@ -19,6 +19,13 @@ flatten = foldl (++) []
 menu :: [Event] -> String
 menu eventList = "\n\n" ++ (flatten (map showEvent eventList)) ++ "\n\na) Add an event\nd) Delete an event\nm) Modify an event\nq) Exit\n"
 
+reorderI :: [Event] -> Int -> [Event] -> [Event]
+reorderI [] _ ys = ys
+reorderI (x:xs) n ys = (reorderI xs (n+1) (ys ++ [(Event (n+1) (label x))]))
+
+reorder :: [Event] -> [Event]
+reorder xs = reorderI xs 0 []
+
 main :: IO ()
 main = doMenu []
 
