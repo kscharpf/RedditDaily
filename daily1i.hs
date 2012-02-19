@@ -1,24 +1,30 @@
 import System.Exit
 import Data.List
 
-
-data Event = Event { num :: Int,
+data Event = Event { 
+                     hour :: Int,
                      label :: String } 
+
+data Command = Command { id :: Char,
+                         data :: String }
+
+instance Read Command where
+    read (Command x str) = 
+
+instance Read AddEvent where
+    readPrecs
 
 instance Eq Event where
     (Event x1 str1) == (Event x2 str2) = x1 == x2
 
 instance Show Event where
-    show (Event x xs) = (show x) ++ ") " ++ (show xs)
-
-showEvent :: Event -> String
-showEvent evt = (show (num evt)) ++ ") " ++ (label evt) ++ "\n"
+    show (Event x str) = (show x) ++ ":00:00 " ++ (show xs) ++ "\n"
 
 flatten :: [[a]] -> [a]
 flatten = foldl (++) []
 
 menu :: [Event] -> String
-menu eventList = "\n\n" ++ (flatten (map showEvent eventList)) ++ "\n\na) Add an event\nd) Delete an event\nm) Modify an event\nq) Exit\n"
+menu eventList = "\n\n" ++ (flatten (map show eventList)) ++ "\n\na) Add an event\nd) Delete an event\nm) Modify an event\nq) Exit\n"
 
 reorderI :: [Event] -> Int -> [Event] -> [Event]
 reorderI [] _ ys = ys
@@ -37,6 +43,9 @@ addEvent xs ys = ys ++ [(Event ((num (last ys)) + 1) xs)]
 deleteEvent :: String -> [Event] -> [Event]
 deleteEvent str [] = [] 
 deleteEvent str ys = reorder (delete (Event (read str ::Int) "") ys) 
+
+modifyEvent :: String -> [Event] -> [Event]
+modifyEvent = undefined
 
 processSplitCommand :: [String] -> [Event] -> [Event]
 processSplitCommand ["a", xs] ys = addEvent xs ys
